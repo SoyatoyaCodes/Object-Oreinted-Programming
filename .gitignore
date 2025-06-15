@@ -1,0 +1,15 @@
+# Ignore all .exe files in any folder
+*.exe
+
+# Ignore CMake build folders (optional but common)
+cmake-build-*/
+
+# Ignore CMake-generated files
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+# OS-specific
+.DS_Store
+Thumbs.db
