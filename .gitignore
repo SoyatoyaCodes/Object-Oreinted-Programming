@@ -10,6 +10,9 @@ CMakeCache.txt
 Makefile
 cmake_install.cmake
 
+# Ignore all build folders anywhere in the project
+**/build/
+
 # OS-specific
 .DS_Store
 Thumbs.db
