@@ -12,13 +12,17 @@
 // 4. Implement a deep copy constructor and repeat step 3 to confirm that the copied object is 
 // independent. 
 // Question: Why does modifying the original object affect the shallow copy but not the deep copy?
+
+/* because in shallow copy, a pointer's address is being copied into the new obj so both objects
+end up sharing the same memory. if we change one object's attribute value, the other one is affected too
+*/
 #include <iostream>
 #include <stdexcept>
 using namespace std;
 class dynamicarray {
 private:
     int* dyn_arr;
-    int s; //dyn array initalization??
+    int s;
 public:
     dynamicarray(int size) {
         dyn_arr = new int[size];
@@ -31,9 +35,12 @@ public:
 
     //default constructor
     dynamicarray() = default;
-    //deep copy constructor
 
+    //deep copy constructor
     dynamicarray(const dynamicarray& obj) { //If we don’t pass by reference, the compiler will try to make a copy, which calls the same constructor again, infinite loop
+
+        cout << "deep copy contructor called" << endl;
+
         this->s = obj.s;
         this->dyn_arr = new int[s];
         for (int i = 0; i < s; i++) {
@@ -71,13 +78,23 @@ int main() {
     for (int i = 0; i < obj.size(); i++) {
         obj.setval(i, i * 10);
     }
-    //shallow copy
+    //shallow copy isnt used because i have my deep copy const defined. comment deep one to try shallow
     dynamicarray obj3 = obj;
-    obj3.setval(2, 3);
+
+    try {
+        obj3.setval(2, 3);
+    }
+    catch (exception& e) {
+        cout << "error! " << e.what();
+    }
+
     cout << "shallow copy affect on obj" << endl;
     cout << obj.getval(2);
 
     //deep copy constructor called
     dynamicarray obj2(obj);
+    obj2.setval(2, 34);
+    cout << "obj to which the orginal obj was assigned" << obj2.getval(2) << endl;
+    cout << "obj that was copied value at index 2 " << obj.getval(2);
 
 }
