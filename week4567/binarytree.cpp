@@ -111,7 +111,7 @@ public:
         q.push(make_tuple(root, level, pos));
 
         int curr_lvl = 0; //to track when to change gap
-        int node_lvl;
+
 
         while (!q.empty()) {
 
@@ -129,8 +129,7 @@ public:
             if (current->getright() != nullptr) {
                 q.push(make_tuple(current->getright(), node_lvl + 1, node_pos + gap));
             }
-
-            node_lvl = get<1>(t);
+            //where are we updating the current lvl? are we?
 
             if (curr_lvl != node_lvl) {
                 gap = gap / 2;//change gap only if level changes
@@ -138,7 +137,6 @@ public:
             }
         }
     }
-
 
     //COMPUTING TREE HEIGHT
     int getheight(node* current) {
@@ -166,6 +164,8 @@ int main() {
     t.addchild(1, 4, 1);
     t.setroot(0);
     t.recursion_display(t.getroot(), 0);
+
+
     int mid = t.gettreesize() / 2;
     int height = t.getheight(t.getroot());
     t.BFSprinting(t.getroot(), 0, mid, height);

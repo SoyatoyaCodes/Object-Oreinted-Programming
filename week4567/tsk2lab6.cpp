@@ -13,7 +13,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <random> 
+#include <random> //trying new lib here!
+#include <cstdlib> //rand and srand
+#include <ctime> //time
 using namespace std;
 //interfaces ie abstract classes. bascially, we use these interfaces to interact with the inherited classes
 class animal {
@@ -23,6 +25,7 @@ public:
     animal(int l) : legs(l) {}
     virtual void walk() = 0;
     virtual void eat() = 0;
+    virtual ~animal() {};
 };
 
 //pet interface
@@ -43,6 +46,7 @@ public:
     }
 
     virtual void play() = 0;
+    virtual ~pet() {};
 };
 
 
@@ -76,6 +80,7 @@ public:
 class cat : public animal, public pet {
 public:
     cat(int l, string n) : animal(l), pet(n) {}
+
     void walk() {
         cout << "she walks so beautifully! meowww";
         cout << R"(
@@ -112,6 +117,7 @@ public:
         };
         random_device rd;
         mt19937 gen(rd());
+        //range wrapper
         uniform_int_distribution<> dist(0, cattoys.size() - 1);
 
         cout << "cat loves some cool toys!!" << endl;
@@ -121,18 +127,107 @@ public:
         cout << "Your cat found a random toy: " << cattoys[dist(gen)] << " 😺\n";
         cout << "cat is happy ฅ^•ﻌ•^ฅ" << endl;
     }
-
-
-
-
-
-
-
 };
 
 class fish : public animal, public pet {
+public:
+    fish(string n, int l) : animal(l), pet(n) {}
+
+    void walk() {
+        cout << "i swim weeeheee" << endl;
+        cout << R"(
+               O  o
+          _\_   o
+>('>   \\/  o\ .
+       //\___=
+          ''
+    )" << endl;
+    }
+
+    void eat() {
+        cout << "seaweed yummy!" << endl;
+        cout << R"( °:•.🐠*.•🪸.•:°)" << endl;
+    }
+
+    void play() {
+        srand(time(0)); //for seeding
+        // string array[5]{"hi"};//this will initalize only the first element with hi. c style arrays dont default to filling all vacant positons with the passed val
+        vector<bool>vec(5, 0);
+        int random_index = rand() % 5;
+        vec[random_index] = 1;
+
+        cout << R"(
+    ✪  ✪  ✪  ✪  ✪
+    0   1  2   3  4
+    )" << endl;
+
+        cout << "Behind which of these objects is the fish hiding? Enter a number: ";
+
+        int num;
+
+        while (true) {
+            cin >> num;
+
+            if (num >= 0 && num < 5) {
+                break;
+            }
+
+            else {
+                cout << "wrong input made. RENTER CORRECT INDEX!" << endl;
+            }
+
+        }
+
+        if (vec[num] == 1) {
+            cout << "yay you found the fish!" << endl;
+            cout << R"(
+        ,-,
+      ,/.(     __
+   ,-'    `!._/ /
+  > @ )<|    _ <
+   `-....,,;' \_\
+        
+        )" << endl;
+        }
+
+        else {
+            cout << "so sad :( try again NEVER.... YOU ONLY GET ONE TRY!" << endl;
+        }
+    }
 
 };
-//go to the right file
-//cd "C:\Users\hp\OneDrive\Desktop\sohacodes\week456" small c also works woohoo
+
 // g++ filename.cpp -o filename -Wl,--subsystem,console
+
+int main() {
+    //creating vectors to store animals and pets seperately  
+    vector<animal*>animals;
+    vector<pet*> pets;
+    //spider, fish, cat,
+    animals.push_back(new spider(8));
+    animals.push_back(new cat(4, "cutie"));
+    pets.push_back(new cat(4, "stampy"));
+    pets.push_back(new fish("dory", 0));
+
+    for (auto* it : animals) {
+        it->eat();
+        it->walk();
+        // it->play();//but cat also can be stored in animal cant it? so how to access play func?
+        if (pet* p = dynamic_cast<pet*>(it)) {
+            p->play();
+        }
+    }
+
+    for (auto* it : pets) {
+        cout << "hi my name is " << it->getname();
+        it->play();
+        if (animal* a = dynamic_cast<animal*>(it)) {
+            a->eat();
+            a->walk();
+        }
+    }
+    //destructors
+    for (auto* a : animals) delete a;
+    for (auto* p : pets) delete p;
+
+}
